@@ -39,3 +39,316 @@ button {
     padding: 12px 25px;
     cursor: pointer;
 }
+
+.products {
+    margin-top: 100px;
+    padding: 30px;
+    text-align: center;
+}
+
+.products h2 {
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+.product-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.product-card {
+    width: 250px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-card h3 {
+    margin: 15px 0;
+}
+
+.product-card p {
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.product-card button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.product-card button:hover {
+    background-color: #444;
+}
+
+.product-container {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.cart-section {
+    margin: 50px auto;
+    padding: 30px;
+    max-width: 800px;
+    text-align: center;
+}
+
+.cart-section h2 {
+    margin-bottom: 25px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.remove-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#total-price {
+    margin-top: 25px;
+}
+
+#searchInput {
+    width: 300px;
+    padding: 12px;
+    margin-bottom: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.category-filter {
+    margin-bottom: 25px;
+}
+
+.filter-btn {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filter-btn:hover {
+    background-color: #444;
+}
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+
+    nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .product-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #searchInput {
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .product-container {
+        grid-template-columns: 1fr;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-btn {
+        padding: 8px 12px;
+        margin: 3px;
+    }
+}
+
+#checkout-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+#checkout-btn:hover {
+    background-color: #218838;
+}
+
+#checkout-form {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+}
+
+#checkout-form input,
+#checkout-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#checkout-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+#order-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#order-confirmation {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #e8f5e9;
+    border: 1px solid #28a745;
+    border-radius: 10px;
+}
+
+#order-confirmation h2 {
+    color: #218838;
+    margin-bottom: 15px;
+}
+
+#ordered-products {
+    margin-top: 20px;
+}
+
+.ordered-item {
+    padding: 10px;
+    margin: 8px 0;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.order-history {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+}
+
+.order-history h2 {
+    margin-bottom: 20px;
+}
+
+.order-card {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.order-card h3 {
+    color: #218838;
+    margin-bottom: 10px;
+}
+
+.order-card p {
+    margin: 5px 0;
+}
+
+.details-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    margin: 8px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.details-btn:hover {
+    background-color: #0056b3;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background-color: white;
+    width: 80%;
+    max-width: 450px;
+    margin: 8% auto;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+
+.modal-content img {
+    width: 200px;
+    height: 180px;
+    object-fit: cover;
+    margin: 15px 0;
+}
+
+#close-modal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 28px;
+    cursor: pointer;
+}

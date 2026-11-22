@@ -1,5 +1,7 @@
+
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Shop Swift</title>
     <link rel="stylesheet" href="style.css">
@@ -7,24 +9,266 @@
 
 <body>
 
+    <!-- Navbar -->
     <nav>
+
         <h2>Shop Swift</h2>
 
         <ul>
             <li>Home</li>
             <li>Products</li>
             <li>About</li>
-            <li>Cart</li>
+            <li>Cart (<span id="cart-count">0</span>)</li>
         </ul>
+
     </nav>
 
+
+    <!-- Welcome Section -->
     <h1>Welcome to Shop Swift</h1>
 
     <p>Find your favourite products at the best prices.</p>
 
     <button id="shopBtn">Shop Now</button>
 
+
+    <!-- Products Section -->
+    <section class="products">
+
+        <h2>Our Products</h2>
+
+
+        <!-- Search Bar -->
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search products..."
+        >
+
+
+        <!-- Category Filter -->
+        <div class="category-filter">
+
+            <button class="filter-btn" data-category="all">
+                All
+            </button>
+
+            <button class="filter-btn" data-category="electronics">
+                Electronics
+            </button>
+
+            <button class="filter-btn" data-category="fashion">
+                Fashion
+            </button>
+
+            <button class="filter-btn" data-category="accessories">
+                Accessories
+            </button>
+
+        </div>
+
+
+        <!-- Product Container -->
+        <div class="product-container">
+
+
+            <!-- Product 1 -->
+<div class="product-card"
+    data-name="Wireless Headphones"
+    data-price="1999"
+    data-category="electronics">
+
+    <img
+        src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500"
+        alt="Headphones"
+    >
+
+    <h3>Wireless Headphones</h3>
+
+    <p>Price: ₹1,999</p>
+
+    <button class="add-cart">Add to Cart</button>
+
+    <!-- New Button -->
+    <button class="details-btn">View Details</button>
+
+</div>
+
+
+            <!-- Product 2 -->
+            <div class="product-card"
+                data-name="Smart Watch"
+                data-price="2499"
+                data-category="accessories">
+
+                <img
+                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"
+                    alt="Watch"
+                >
+
+                <h3>Smart Watch</h3>
+
+                <p>Price: ₹2,499</p>
+
+                <button class="add-cart">Add to Cart</button>
+
+                <button class="details-btn">View Details</button>
+
+            </div>
+
+
+            <!-- Product 3 -->
+            <div class="product-card"
+                data-name="Sports Shoes"
+                data-price="1799"
+                data-category="fashion">
+
+                <img
+                    src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+                    alt="Shoes"
+                >
+
+                <h3>Sports Shoes</h3>
+
+                <p>Price: ₹1,799</p>
+
+                <button class="add-cart">Add to Cart</button>
+
+                <button class="details-btn">View Details</button>
+
+            </div>
+
+
+            <!-- Product 4 -->
+            <div class="product-card"
+                data-name="Travel Backpack"
+                data-price="999"
+                data-category="fashion">
+
+                <img
+                    src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500"
+                    alt="Bag"
+                >
+
+                <h3>Travel Backpack</h3>
+
+                <p>Price: ₹999</p>
+
+                <button class="add-cart">Add to Cart</button>
+
+                <button class="details-btn">View Details</button>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+    <!-- Product Details Modal -->
+<div id="product-modal" class="modal">
+
+    <div class="modal-content">
+
+        <span id="close-modal">&times;</span>
+
+        <h2 id="modal-name"></h2>
+
+        <img id="modal-image" src="" alt="Product Image">
+
+        <h3 id="modal-price"></h3>
+
+        <p id="modal-description"></p>
+
+    </div>
+
+</div>
+
+
+    <!-- Shopping Cart Section -->
+    <section class="cart-section">
+
+        <h2>Shopping Cart</h2>
+
+        <div id="cart-items">
+
+            <p>Your cart is empty.</p>
+
+        </div>
+
+        <h3 id="total-price">Total: ₹0</h3>
+
+        <button id="checkout-btn">Proceed to Checkout</button>
+
+        <!-- Checkout Form -->
+<div id="checkout-form" style="display: none;">
+
+    <h2>Customer Details</h2>
+
+    <form id="order-form">
+
+        <label>Full Name:</label>
+        <input type="text" id="customer-name" placeholder="Enter your name" required>
+
+        <br><br>
+
+        <label>Email:</label>
+        <input type="email" id="customer-email" placeholder="Enter your email" required>
+
+        <br><br>
+
+        <label>Phone Number:</label>
+        <input type="tel" id="customer-phone" placeholder="Enter phone number" required>
+
+        <br><br>
+
+        <label>Delivery Address:</label>
+        <textarea id="customer-address" placeholder="Enter your full address" required></textarea>
+
+        <br><br>
+
+        <button type="submit">Place Order</button>
+
+    </form>
+
+</div>
+
+    </section>
+
+    <!-- Order Confirmation Section -->
+<section id="order-confirmation" style="display: none;">
+
+    <h2>Order Placed Successfully!</h2>
+
+    <p>Thank you for shopping with Shop Swift.</p>
+
+    <h3>Order Details</h3>
+
+    <p><strong>Order ID:</strong> <span id="order-id"></span></p>
+
+    <p><strong>Customer Name:</strong> <span id="order-customer"></span></p>
+
+    <div id="ordered-products"></div>
+
+    <h3 id="order-total"></h3>
+
+</section>
+
+<!-- Order History Section -->
+<section class="order-history">
+
+    <h2>My Order History</h2>
+
+    <div id="order-history-list">
+        <p>No previous orders found.</p>
+    </div>
+
+</section>
+
+
+    <!-- JavaScript -->
     <script src="script.js"></script>
 
 </body>
+
 </html>
