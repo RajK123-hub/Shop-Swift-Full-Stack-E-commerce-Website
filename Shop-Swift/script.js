@@ -16,14 +16,66 @@ button.addEventListener("click", function() {
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-const cartButtons = document.querySelectorAll(".add-cart");
 const cartDisplay = document.getElementById("cart-count");
 const cartItems = document.getElementById("cart-items");
 const totalPrice = document.getElementById("total-price");
 
 
 // ========================================
-// 3. DISPLAY CART
+// 3. PRODUCT SETUP
+// ========================================
+
+const productContainer = document.getElementById("product-container");
+const searchInput = document.getElementById("searchInput");
+const filterButtons = document.querySelectorAll(".filter-btn");
+
+let products = [];
+let selectedCategory = "all";
+
+
+// ========================================
+// 4. DISPLAY PRODUCTS
+// ========================================
+
+function renderProducts(productsToDisplay) {
+
+    productContainer.innerHTML = "";
+
+    if (productsToDisplay.length === 0) {
+        productContainer.innerHTML = "<p>No products found.</p>";
+        return;
+    }
+
+    productsToDisplay.forEach(function(product) {
+
+        const card = document.createElement("div");
+
+        card.classList.add("product-card");
+
+        card.dataset.id = product.id;
+        card.dataset.name = product.name;
+        card.dataset.price = product.price;
+
+        card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+
+            <h3>${product.name}</h3>
+
+            <p>Price: ₹${product.price.toLocaleString("en-IN")}</p>
+
+            <button class="add-cart">Add to Cart</button>
+
+            <button class="details-btn">View Details</button>
+        `;
+
+        productContainer.appendChild(card);
+
+    });
+}
+
+
+// ========================================
+// 5. DISPLAY CART
 // ========================================
 
 function displayCart() {
@@ -37,97 +89,98 @@ function displayCart() {
         cartItems.innerHTML = "<p>Your cart is empty.</p>";
     }
 
-    for (let i = 0; i < cart.length; i++) {
+    cart.forEach(function(item, index) {
 
-        let itemTotal = cart[i].price * cart[i].quantity;
+        const itemTotal = item.price * item.quantity;
 
-        total = total + itemTotal;
-        count = count + cart[i].quantity;
+        total += itemTotal;
+        count += item.quantity;
 
-        const div = document.createElement("div");
+        const cartItem = document.createElement("div");
 
-        div.classList.add("cart-item");
+        cartItem.classList.add("cart-item");
 
-        div.innerHTML = `
-            <span>${cart[i].name}</span>
-            <span>₹${cart[i].price}</span>
+        cartItem.innerHTML = `
+            <h3>${item.name}</h3>
 
-            <button class="decrease-btn" data-index="${i}">−</button>
+            <p>Price: ₹${item.price.toLocaleString("en-IN")}</p>
 
-            <span>${cart[i].quantity}</span>
+            <button class="decrease" data-index="${index}">-</button>
 
-            <button class="increase-btn" data-index="${i}">+</button>
+            <span>${item.quantity}</span>
 
-            <span>₹${itemTotal}</span>
+            <button class="increase" data-index="${index}">+</button>
 
-            <button class="remove-btn" data-index="${i}">Remove</button>
+            <p>Subtotal: ₹${itemTotal.toLocaleString("en-IN")}</p>
+
+            <button class="remove" data-index="${index}">Remove</button>
         `;
 
-        cartItems.appendChild(div);
-    }
+        cartItems.appendChild(cartItem);
 
-    totalPrice.innerText = "Total: ₹" + total;
+    });
 
-    cartDisplay.innerText = count;
+    totalPrice.textContent =
+        "Total: ₹" + total.toLocaleString("en-IN");
 
-    // Save cart in LocalStorage
+    cartDisplay.textContent = count;
+
     localStorage.setItem("cart", JSON.stringify(cart));
+
 }
 
 
 // ========================================
-// 4. ADD PRODUCTS TO CART
+// 6. ADD PRODUCTS TO CART
 // ========================================
 
-cartButtons.forEach(function(btn) {
+productContainer.addEventListener("click", function(e) {
 
-    btn.addEventListener("click", function() {
+    const productCard = e.target.closest(".product-card");
 
-        const product = btn.parentElement;
+    if (!productCard) return;
 
-        const name = product.dataset.name;
-        const price = Number(product.dataset.price);
+    if (e.target.classList.contains("add-cart")) {
+
+        const name = productCard.dataset.name;
+        const price = Number(productCard.dataset.price);
 
         const existingProduct = cart.find(function(item) {
             return item.name === name;
         });
 
         if (existingProduct) {
-
             existingProduct.quantity++;
-
         } else {
-
             cart.push({
                 name: name,
                 price: price,
                 quantity: 1
             });
-
         }
 
         displayCart();
 
-    });
+    }
 
 });
 
 
 // ========================================
-// 5. INCREASE, DECREASE AND REMOVE PRODUCTS
+// 7. INCREASE, DECREASE AND REMOVE CART ITEMS
 // ========================================
 
 cartItems.addEventListener("click", function(e) {
 
     const index = Number(e.target.dataset.index);
 
-    if (e.target.classList.contains("increase-btn")) {
+    if (e.target.classList.contains("increase")) {
 
         cart[index].quantity++;
 
     }
 
-    else if (e.target.classList.contains("decrease-btn")) {
+    else if (e.target.classList.contains("decrease")) {
 
         cart[index].quantity--;
 
@@ -137,14 +190,10 @@ cartItems.addEventListener("click", function(e) {
 
     }
 
-    else if (e.target.classList.contains("remove-btn")) {
+    else if (e.target.classList.contains("remove")) {
 
         cart.splice(index, 1);
 
-    }
-
-    else {
-        return;
     }
 
     displayCart();
@@ -152,59 +201,35 @@ cartItems.addEventListener("click", function(e) {
 });
 
 
-// Display cart when page loads
-displayCart();
-
-
 // ========================================
-// 6. SEARCH AND CATEGORY FILTER
+// 8. SEARCH AND CATEGORY FILTER
 // ========================================
-
-const searchInput = document.getElementById("searchInput");
-
-const productCards = document.querySelectorAll(".product-card");
-
-const filterButtons = document.querySelectorAll(".filter-btn");
-
-let selectedCategory = "all";
-
 
 function filterProducts() {
 
     const searchValue = searchInput.value.toLowerCase();
 
-    productCards.forEach(function(product) {
+    const filteredProducts = products.filter(function(product) {
 
-        const productName = product.dataset.name.toLowerCase();
-
-        const productCategory = product.dataset.category;
-
-        const matchesSearch = productName.includes(searchValue);
+        const matchesSearch =
+            product.name.toLowerCase().includes(searchValue);
 
         const matchesCategory =
             selectedCategory === "all" ||
-            productCategory === selectedCategory;
+            product.category === selectedCategory;
 
-        if (matchesSearch && matchesCategory) {
-
-            product.style.display = "block";
-
-        } else {
-
-            product.style.display = "none";
-
-        }
+        return matchesSearch && matchesCategory;
 
     });
+
+    renderProducts(filteredProducts);
 
 }
 
 
-// Search event
 searchInput.addEventListener("input", filterProducts);
 
 
-// Category filter event
 filterButtons.forEach(function(btn) {
 
     btn.addEventListener("click", function() {
@@ -219,19 +244,17 @@ filterButtons.forEach(function(btn) {
 
 
 // ========================================
-// 7. CHECKOUT BUTTON
+// 9. CHECKOUT BUTTON
 // ========================================
 
-const checkoutBtn = document.getElementById("checkout-btn");
-
+const checkoutButton = document.getElementById("checkout-btn");
 const checkoutForm = document.getElementById("checkout-form");
 
-
-checkoutBtn.addEventListener("click", function() {
+checkoutButton.addEventListener("click", function() {
 
     if (cart.length === 0) {
 
-        alert("Your cart is empty!");
+        alert("Your cart is empty. Please add products first.");
 
         return;
 
@@ -239,70 +262,127 @@ checkoutBtn.addEventListener("click", function() {
 
     checkoutForm.style.display = "block";
 
-    checkoutForm.scrollIntoView({
-        behavior: "smooth"
-    });
-
 });
 
 
 // ========================================
-// 8. DISPLAY ORDER HISTORY
+// 10. DISPLAY ORDER HISTORY
 // ========================================
+
+
 
 function displayOrderHistory() {
 
-    const historyList = document.getElementById("order-history-list");
+    const orderHistoryList =
+        document.getElementById("order-history-list");
 
     const orders = JSON.parse(localStorage.getItem("orders")) || [];
 
-    historyList.innerHTML = "";
+    orderHistoryList.innerHTML = "";
 
     if (orders.length === 0) {
 
-        historyList.innerHTML = "<p>No previous orders found.</p>";
+        orderHistoryList.innerHTML =
+            "<p>No previous orders found.</p>";
 
         return;
 
     }
 
-    for (let i = 0; i < orders.length; i++) {
+    orders.forEach(function(order) {
 
         const orderCard = document.createElement("div");
 
-        orderCard.className = "order-card";
+        orderCard.classList.add("order-card");
 
-        const heading = document.createElement("h3");
+        // Support old and new customer formats
+        const customer = order.customer || {};
 
-        heading.textContent = "Order ID: " + orders[i].orderId;
+        const customerName =
+            customer.name || order.customerName || "Not available";
 
-        const customer = document.createElement("p");
+        const customerEmail =
+            customer.email || order.customerEmail || "Not available";
 
-        customer.textContent = "Customer: " + orders[i].customerName;
+        const customerPhone =
+            customer.phone || order.customerPhone || "Not available";
 
-        const total = document.createElement("p");
+        const customerAddress =
+            customer.address || order.customerAddress || "Not available";
 
-        total.textContent = "Total Amount: ₹" + orders[i].totalAmount;
 
-        orderCard.appendChild(heading);
+        // Get products safely
+        const orderProducts = Array.isArray(order.products)
+            ? order.products
+            : [];
 
-        orderCard.appendChild(customer);
+        let productDetails = "";
 
-        orderCard.appendChild(total);
+        orderProducts.forEach(function(product) {
 
-        historyList.appendChild(orderCard);
+            const quantity = Number(product.quantity) || 1;
+            const price = Number(product.price) || 0;
 
-    }
+            productDetails += `
+                <p>
+                    ${product.name || "Product"} -
+                    Quantity: ${quantity} -
+                    Price: ₹${(price * quantity).toLocaleString("en-IN")}
+                </p>
+            `;
+
+        });
+
+
+        // Support total field and calculate if missing
+        let orderTotal = Number(order.total);
+
+        if (!Number.isFinite(orderTotal)) {
+
+            orderTotal = orderProducts.reduce(function(sum, product) {
+
+                return sum +
+                    (Number(product.price) || 0) *
+                    (Number(product.quantity) || 1);
+
+            }, 0);
+
+        }
+
+
+        orderCard.innerHTML = `
+            <h3>Order ID: ${order.orderId || "Not available"}</h3>
+
+            <p>Customer: ${customerName}</p>
+
+            <p>Email: ${customerEmail}</p>
+
+            <p>Phone: ${customerPhone}</p>
+
+            <p>Address: ${customerAddress}</p>
+
+            <h4>Products:</h4>
+
+            ${productDetails || "<p>No product details available.</p>"}
+
+            <h3>Total: ₹${orderTotal.toLocaleString("en-IN")}</h3>
+
+            <hr>
+        `;
+
+        orderHistoryList.appendChild(orderCard);
+
+    });
 
 }
 
 
+
 // ========================================
-// 9. PLACE ORDER
+// 11. PLACE ORDER
 // ========================================
 
 const orderForm = document.getElementById("order-form");
-
 
 orderForm.addEventListener("submit", function(e) {
 
@@ -316,32 +396,36 @@ orderForm.addEventListener("submit", function(e) {
 
     }
 
-    // Get customer details
-    const customerName = document.getElementById("customer-name").value;
+    const customerName =
+        document.getElementById("customer-name").value;
 
-    const customerEmail = document.getElementById("customer-email").value;
+    const customerEmail =
+        document.getElementById("customer-email").value;
 
-    const customerPhone = document.getElementById("customer-phone").value;
+    const customerPhone =
+        document.getElementById("customer-phone").value;
 
-    const customerAddress = document.getElementById("customer-address").value;
-
-
-    // Generate unique order ID
-    const orderId = "SS" + Date.now();
+    const customerAddress =
+        document.getElementById("customer-address").value;
 
 
-    // Create order object
-    const orderDetails = {
+    const total = cart.reduce(function(sum, item) {
 
-        orderId: orderId,
+        return sum + item.price * item.quantity;
 
-        customerName: customerName,
+    }, 0);
 
-        customerEmail: customerEmail,
 
-        customerPhone: customerPhone,
+    const order = {
 
-        customerAddress: customerAddress,
+        orderId: "SS" + Date.now(),
+
+        customer: {
+            name: customerName,
+            email: customerEmail,
+            phone: customerPhone,
+            address: customerAddress
+        },
 
         products: cart.map(function(item) {
 
@@ -353,162 +437,214 @@ orderForm.addEventListener("submit", function(e) {
 
         }),
 
-        totalAmount: cart.reduce(function(total, item) {
-
-            return total + item.price * item.quantity;
-
-        }, 0)
+        total: total
 
     };
 
 
-    // Get previous orders
+    // Save order in LocalStorage
+
     let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
+    orders.push(order);
 
-    // Add new order
-    orders.push(orderDetails);
-
-
-    // Save orders in LocalStorage
     localStorage.setItem("orders", JSON.stringify(orders));
 
 
-    // Update order history immediately
-    displayOrderHistory();
+    // Display order confirmation
 
+    document.getElementById("order-id").textContent =
+        order.orderId;
 
-    // ========================================
-    // DISPLAY ORDER CONFIRMATION
-    // ========================================
+    document.getElementById("order-customer").textContent =
+        customerName;
 
-    document.getElementById("order-id").textContent = orderDetails.orderId;
-
-    document.getElementById("order-customer").textContent = orderDetails.customerName;
-
-
-    const orderedProducts = document.getElementById("ordered-products");
+    const orderedProducts =
+        document.getElementById("ordered-products");
 
     orderedProducts.innerHTML = "";
 
+    order.products.forEach(function(product) {
 
-    orderDetails.products.forEach(function(item) {
+        const p = document.createElement("p");
 
-        const product = document.createElement("div");
+        p.textContent =
+            product.name +
+            " x " +
+            product.quantity +
+            " = ₹" +
+            (product.price * product.quantity).toLocaleString("en-IN");
 
-        product.className = "ordered-item";
-
-        product.textContent =
-            item.name + " - ₹" + item.price +
-            " x " + item.quantity +
-            " = ₹" + (item.price * item.quantity);
-
-        orderedProducts.appendChild(product);
+        orderedProducts.appendChild(p);
 
     });
 
 
     document.getElementById("order-total").textContent =
-        "Total Amount: ₹" + orderDetails.totalAmount;
+        "Total: ₹" + total.toLocaleString("en-IN");
 
 
-    // Show confirmation section
-    document.getElementById("order-confirmation").style.display = "block";
+    document.getElementById("order-confirmation").style.display =
+        "block";
 
 
-    // Clear cart
+    // Clear cart after successful order
+
     cart = [];
-
-    localStorage.setItem("cart", JSON.stringify(cart));
 
     displayCart();
 
-
-    // Hide and reset checkout form
     checkoutForm.style.display = "none";
 
     orderForm.reset();
 
 
-    // Scroll to confirmation
-    document.getElementById("order-confirmation").scrollIntoView({
-        behavior: "smooth"
-    });
+    alert("Your order has been placed successfully!");
 
 });
 
 
 // ========================================
-// 10. SHOW PREVIOUS ORDERS WHEN PAGE LOADS
+// 12. PRODUCT DETAILS MODAL
 // ========================================
 
-displayOrderHistory();
-
-
-// ========================================
-// 11. PRODUCT DETAILS MODAL
-// ========================================
-
-const detailsButtons = document.querySelectorAll(".details-btn");
-
-const modal = document.getElementById("product-modal");
+const productModal = document.getElementById("product-modal");
 
 const closeModal = document.getElementById("close-modal");
 
-const modalName = document.getElementById("modal-name");
+productContainer.addEventListener("click", function(e) {
 
-const modalImage = document.getElementById("modal-image");
+    if (e.target.classList.contains("details-btn")) {
 
-const modalPrice = document.getElementById("modal-price");
+        const productCard = e.target.closest(".product-card");
 
-const modalDescription = document.getElementById("modal-description");
+        const productId = Number(productCard.dataset.id);
 
+        const selectedProduct = products.find(function(product) {
 
-detailsButtons.forEach(function(btn) {
+            return product.id === productId;
 
-    btn.addEventListener("click", function() {
+        });
 
-        const product = btn.parentElement;
+        if (!selectedProduct) return;
 
-        const name = product.dataset.name;
+        document.getElementById("modal-name").textContent =
+            selectedProduct.name;
 
-        const price = product.dataset.price;
+        document.getElementById("modal-image").src =
+            selectedProduct.image;
 
-        const image = product.querySelector("img").src;
+        document.getElementById("modal-price").textContent =
+            "Price: ₹" + selectedProduct.price.toLocaleString("en-IN");
 
+        document.getElementById("modal-description").textContent =
+            selectedProduct.description;
 
-        modalName.textContent = name;
-
-        modalPrice.textContent = "Price: ₹" + price;
-
-        modalImage.src = image;
-
-        modalDescription.textContent =
-            "Explore our " + name + ". Order now from Shop Swift!";
-
-
-        modal.style.display = "block";
-
-    });
-
-});
-
-
-// Close modal using close button
-closeModal.addEventListener("click", function() {
-
-    modal.style.display = "none";
-
-});
-
-
-// Close modal by clicking outside it
-window.addEventListener("click", function(e) {
-
-    if (e.target === modal) {
-
-        modal.style.display = "none";
+        productModal.style.display = "block";
 
     }
 
 });
+
+
+// Close modal using X button
+
+closeModal.addEventListener("click", function() {
+
+    productModal.style.display = "none";
+
+});
+
+
+// Close modal by clicking outside
+
+window.addEventListener("click", function(e) {
+
+    if (e.target === productModal) {
+
+        productModal.style.display = "none";
+
+    }
+
+});
+
+
+// ========================================
+// 13. FETCH PRODUCTS FROM BACKEND API
+// ========================================
+
+const API_URL = "https://didactic-guide-q76pg9pp94xr299v-5000.app.github.dev/api/products";
+
+fetch(API_URL)
+
+    .then(function(response) {
+
+        if (!response.ok) {
+
+            throw new Error("Failed to fetch products");
+
+        }
+
+        return response.json();
+
+    })
+
+    .then(function(data) {
+
+        console.log("Products received from backend:", data);
+
+        products = data;
+
+        renderProducts(products);
+
+    })
+
+    .catch(function(error) {
+
+        console.log("Error fetching products:", error);
+
+        productContainer.innerHTML =
+            "<p>Unable to load products. Please check whether the backend server is running.</p>";
+
+    });
+
+
+// ========================================
+// 14. VIEW / HIDE ORDER HISTORY
+// ========================================
+
+const historyButton = document.getElementById("history-btn");
+
+const orderHistoryList =
+    document.getElementById("order-history-list");
+
+
+historyButton.addEventListener("click", function() {
+
+    if (orderHistoryList.style.display === "none") {
+
+        orderHistoryList.style.display = "block";
+
+        // Load the latest saved orders when history is opened
+        displayOrderHistory();
+
+        historyButton.textContent = "Hide Order History";
+
+    }
+
+    else {
+
+        orderHistoryList.style.display = "none";
+
+        historyButton.textContent = "View Order History";
+
+    }
+
+});
+
+
+// ========================================
+// 15. INITIAL PAGE LOAD
+// ========================================
+
+displayCart();

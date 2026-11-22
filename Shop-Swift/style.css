@@ -352,3 +352,36 @@ button {
     font-size: 28px;
     cursor: pointer;
 }
+
+
+/* Smooth Navbar Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Navbar Links */
+nav ul li a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+nav ul li a:hover {
+    color: orange;
+}
+
+/* Product Images */
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Product Container */
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}

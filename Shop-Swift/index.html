@@ -15,28 +15,31 @@
         <h2>Shop Swift</h2>
 
         <ul>
-            <li>Home</li>
-            <li>Products</li>
-            <li>About</li>
-            <li>Cart (<span id="cart-count">0</span>)</li>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#cart">Cart (<span id="cart-count">0</span>)</a></li>
         </ul>
 
     </nav>
 
 
     <!-- Welcome Section -->
-    <h1>Welcome to Shop Swift</h1>
+    <section id="home" class="hero">
 
-    <p>Find your favourite products at the best prices.</p>
+        <h1>Welcome to Shop Swift</h1>
 
-    <button id="shopBtn">Shop Now</button>
+        <p>Find your favourite products at the best prices.</p>
+
+        <button id="shopBtn">Shop Now</button>
+
+    </section>
 
 
     <!-- Products Section -->
-    <section class="products">
+    <section class="products" id="products">
 
         <h2>Our Products</h2>
-
 
         <!-- Search Bar -->
         <input
@@ -44,7 +47,6 @@
             id="searchInput"
             placeholder="Search products..."
         >
-
 
         <!-- Category Filter -->
         <div class="category-filter">
@@ -67,126 +69,52 @@
 
         </div>
 
+        <!-- Dynamic Product Container -->
+        <div class="product-container" id="product-container">
 
-        <!-- Product Container -->
-        <div class="product-container">
-
-
-            <!-- Product 1 -->
-<div class="product-card"
-    data-name="Wireless Headphones"
-    data-price="1999"
-    data-category="electronics">
-
-    <img
-        src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500"
-        alt="Headphones"
-    >
-
-    <h3>Wireless Headphones</h3>
-
-    <p>Price: ₹1,999</p>
-
-    <button class="add-cart">Add to Cart</button>
-
-    <!-- New Button -->
-    <button class="details-btn">View Details</button>
-
-</div>
-
-
-            <!-- Product 2 -->
-            <div class="product-card"
-                data-name="Smart Watch"
-                data-price="2499"
-                data-category="accessories">
-
-                <img
-                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"
-                    alt="Watch"
-                >
-
-                <h3>Smart Watch</h3>
-
-                <p>Price: ₹2,499</p>
-
-                <button class="add-cart">Add to Cart</button>
-
-                <button class="details-btn">View Details</button>
-
-            </div>
-
-
-            <!-- Product 3 -->
-            <div class="product-card"
-                data-name="Sports Shoes"
-                data-price="1799"
-                data-category="fashion">
-
-                <img
-                    src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
-                    alt="Shoes"
-                >
-
-                <h3>Sports Shoes</h3>
-
-                <p>Price: ₹1,799</p>
-
-                <button class="add-cart">Add to Cart</button>
-
-                <button class="details-btn">View Details</button>
-
-            </div>
-
-
-            <!-- Product 4 -->
-            <div class="product-card"
-                data-name="Travel Backpack"
-                data-price="999"
-                data-category="fashion">
-
-                <img
-                    src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500"
-                    alt="Bag"
-                >
-
-                <h3>Travel Backpack</h3>
-
-                <p>Price: ₹999</p>
-
-                <button class="add-cart">Add to Cart</button>
-
-                <button class="details-btn">View Details</button>
-
-            </div>
-
+            <p>Loading products...</p>
 
         </div>
 
     </section>
 
+
     <!-- Product Details Modal -->
-<div id="product-modal" class="modal">
+    <div id="product-modal" class="modal">
 
-    <div class="modal-content">
+        <div class="modal-content">
 
-        <span id="close-modal">&times;</span>
+            <span id="close-modal">&times;</span>
 
-        <h2 id="modal-name"></h2>
+            <h2 id="modal-name"></h2>
 
-        <img id="modal-image" src="" alt="Product Image">
+            <img id="modal-image" src="" alt="Product Image">
 
-        <h3 id="modal-price"></h3>
+            <h3 id="modal-price"></h3>
 
-        <p id="modal-description"></p>
+            <p id="modal-description"></p>
+
+        </div>
 
     </div>
 
-</div>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+
+        <h2>About Shop Swift</h2>
+
+        <p>
+            Shop Swift is an online shopping platform where you can
+            explore products, compare prices, add products to your cart,
+            and place orders easily.
+        </p>
+
+    </section>
 
 
     <!-- Shopping Cart Section -->
-    <section class="cart-section">
+    <section class="cart-section" id="cart">
 
         <h2>Shopping Cart</h2>
 
@@ -200,70 +128,113 @@
 
         <button id="checkout-btn">Proceed to Checkout</button>
 
+
         <!-- Checkout Form -->
-<div id="checkout-form" style="display: none;">
+        <div id="checkout-form" style="display: none;">
 
-    <h2>Customer Details</h2>
+            <h2>Customer Details</h2>
 
-    <form id="order-form">
+            <form id="order-form">
 
-        <label>Full Name:</label>
-        <input type="text" id="customer-name" placeholder="Enter your name" required>
+                <label>Full Name:</label>
 
-        <br><br>
+                <input
+                    type="text"
+                    id="customer-name"
+                    placeholder="Enter your name"
+                    required
+                >
 
-        <label>Email:</label>
-        <input type="email" id="customer-email" placeholder="Enter your email" required>
+                <br><br>
 
-        <br><br>
+                <label>Email:</label>
 
-        <label>Phone Number:</label>
-        <input type="tel" id="customer-phone" placeholder="Enter phone number" required>
+                <input
+                    type="email"
+                    id="customer-email"
+                    placeholder="Enter your email"
+                    required
+                >
 
-        <br><br>
+                <br><br>
 
-        <label>Delivery Address:</label>
-        <textarea id="customer-address" placeholder="Enter your full address" required></textarea>
+                <label>Phone Number:</label>
 
-        <br><br>
+                <input
+                    type="tel"
+                    id="customer-phone"
+                    placeholder="Enter phone number"
+                    required
+                >
 
-        <button type="submit">Place Order</button>
+                <br><br>
 
-    </form>
+                <label>Delivery Address:</label>
 
-</div>
+                <textarea
+                    id="customer-address"
+                    placeholder="Enter your full address"
+                    required
+                ></textarea>
+
+                <br><br>
+
+                <button type="submit">Place Order</button>
+
+            </form>
+
+        </div>
 
     </section>
 
+
     <!-- Order Confirmation Section -->
-<section id="order-confirmation" style="display: none;">
+    <section id="order-confirmation" style="display: none;">
 
-    <h2>Order Placed Successfully!</h2>
+        <h2>Order Placed Successfully!</h2>
 
-    <p>Thank you for shopping with Shop Swift.</p>
+        <p>Thank you for shopping with Shop Swift.</p>
 
-    <h3>Order Details</h3>
+        <h3>Order Details</h3>
 
-    <p><strong>Order ID:</strong> <span id="order-id"></span></p>
+        <p>
+            <strong>Order ID:</strong>
+            <span id="order-id"></span>
+        </p>
 
-    <p><strong>Customer Name:</strong> <span id="order-customer"></span></p>
+        <p>
+            <strong>Customer Name:</strong>
+            <span id="order-customer"></span>
+        </p>
 
-    <div id="ordered-products"></div>
+        <div id="ordered-products"></div>
 
-    <h3 id="order-total"></h3>
+        <h3 id="order-total"></h3>
 
-</section>
+    </section>
 
-<!-- Order History Section -->
+
+    <!-- Order History Section -->
+
 <section class="order-history">
 
     <h2>My Order History</h2>
 
-    <div id="order-history-list">
-        <p>No previous orders found.</p>
+    <button id="history-btn">View Order History</button>
+
+    <div id="order-history-list" style="display: none;">
     </div>
 
 </section>
+
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>&copy; 2026 Shop Swift. All rights reserved.</p>
+
+    </footer>
 
 
     <!-- JavaScript -->
